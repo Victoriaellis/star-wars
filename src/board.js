@@ -20,13 +20,13 @@ export default function Board() {
     //const [filmAppearances, setFilms] = useState(null)
 
     const pickStarship = () => {
-      let starships = [1 , 2, 3, 4, 5, 6, 7, 8, 9]
+      let starships = [1 , 2, 3, 5, 8, 9]
       let selectedStarship = starships[Math.floor(Math.random()*starships.length)]
       starships = starships.filter((ship) => ship != selectedStarship)
-      return selectedStarship
+      return selectedStarship.toString()
     }
     const fetchStarships = (starshipNum) => {
-      return fetch('https://www.swapi.tech/api/starships/' + starshipNum.toString())
+      return fetch('https://www.swapi.tech/api/starships/' + starshipNum)
     }
     // useEffect(() => {
     //         fetchStarships(pickStarship())
@@ -55,15 +55,25 @@ export default function Board() {
           setShipClass(data.result.properties.starship_class)
           //setFilms((data.result.properties.films).length)
           //player2
-          fetchStarships(pickStarship())
-          setData2(data)
-          setCredits2(data.result.properties.cost_in_credits)
-          setPassengers2(data.result.properties.passengers)
-          setSpeed2(data.result.properties.max_atmosphering_speed)
-          setName2(data.result.properties.name)
-          setShipClass2(data.result.properties.starship_class)
+      .then(response => response.json())
+      .then(data => {
+        fetchStarships(pickStarship())
+        setData2(data)
+        setCredits2(data.result.properties.cost_in_credits)
+        setPassengers2(data.result.properties.passengers)
+        setSpeed2(data.result.properties.max_atmosphering_speed)
+        setName2(data.result.properties.name)
+        setShipClass2(data.result.properties.starship_class)
+      })
       });
     }, []);
+    const p1IsWinner = (player1Stat, player2Stat) = () => {
+      if(parseInt(player1Stat) > parseInt(player2Stat)) {
+        return true
+      } else{
+        return false
+      }
+    }
   return (
     <div>
       <div className='container'>
